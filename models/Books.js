@@ -15,7 +15,7 @@ const bookSchema = mongoose.Schema({
       grade: { type: Number, required: true },
     },
   ],
-  averageRating: { type: Number, required: true },
+  averageRating: { type: Number },
 });
 
 //export du schéma pour le rendre disponible pour Express

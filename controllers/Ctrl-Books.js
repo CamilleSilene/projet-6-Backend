@@ -23,7 +23,7 @@ exports.getAllBook = (req, res, next) => {
       const book = new Book({
         ...req.body
       });
-    thing.save()
+      book.save()
     .then(() => res.status(201).json({message: 'Livre enregistré'}))
     .catch(error => res.status(400).json({error}));
     };

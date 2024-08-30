@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const stuffCtrl = require('../controllers/Ctrl-Books');
+const booksCtrl = require('../controllers/Ctrl-Books');
 
-router.get('/', stuffCtrl.getAllBook);
-router.post('/', stuffCtrl.createBook);
-router.get('/:id', stuffCtrl.getOneBook);
-router.put('/:id', stuffCtrl.modifyBook);
-router.delete('/:id', stuffCtrl.deleteBook);
+router.get('/', booksCtrl.getAllBook);
+router.post('/', booksCtrl.createBook);
+router.get('/:id', booksCtrl.getOneBook);
+router.put('/:id', booksCtrl.modifyBook);
+router.delete('/:id', booksCtrl.deleteBook);
 
 module.exports = router;

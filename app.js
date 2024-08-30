@@ -1,19 +1,23 @@
+
+const dotenv = require("dotenv");
+dotenv.config();
+
 //fonction d'importation d'express
 const express = require("express");
-
 //constante app qui va appeler la méthode express
 const app = express();
-
 app.use(express.json());
 
 const mongoose = require("mongoose");
-
+const booksRoutes = require("./routes/books");
 const User = require("./models/Users");
 const Book = require("./models/Books");
 
+const mongoConnectionConfig = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}/${process.env.MONGO_DB}?${process.env.MONGO_OPTIONS}`;
+
 mongoose
   .connect(
-    "mongodb+srv://pierrotcamille04:qhqKTmyT9KsEbumx@cluster0.b8lhp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    mongoConnectionConfig,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
@@ -37,7 +41,7 @@ app.use((req, res, next) => {
 
 
 
-app.use('/api/books', stuffRoutes);
+app.use('/api/books', booksRoutes);
 
 //exporter l'app pour pouvoir utiliser sur les autres fichiers
 module.exports = app;
