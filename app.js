@@ -10,6 +10,7 @@ app.use(express.json());
 
 const mongoose = require("mongoose");
 const booksRoutes = require("./routes/books");
+const usersRoutes = require('./routes/users');
 const User = require("./models/Users");
 const Book = require("./models/Books");
 
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 
 
 app.use('/api/books', booksRoutes);
+app.use('/api/auth', usersRoutes);
 
 //exporter l'app pour pouvoir utiliser sur les autres fichiers
 module.exports = app;
