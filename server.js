@@ -16,7 +16,7 @@ const normalizePort = val => {
     return false;
   };
   //process.env.PORT est utilisé si le port 3000 n'est pas disponible
-  const port = normalizePort(process.env.PORT || '3000');
+  const port = normalizePort(process.env.PORT || '4000');
   app.set('port', port);
   
   //fonction qui recherche les erreurs et les gère

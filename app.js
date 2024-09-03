@@ -2,6 +2,8 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
+var cors = require('cors');
+
 //fonction d'importation d'express
 const express = require("express");
 //constante app qui va appeler la méthode express
@@ -10,7 +12,7 @@ app.use(express.json());
 
 const mongoose = require("mongoose");
 const booksRoutes = require("./routes/books");
-const usersRoutes = require('./routes/users');
+const usersRoutes = require("./routes/users");
 const User = require("./models/Users");
 const Book = require("./models/Books");
 
@@ -27,20 +29,16 @@ mongoose
 //middleware général : appliqué à toutes les routes du serveur
 //fonction pour ajouter des en-têtes aux réponses qu'on renvoie au navigateur pour autoriser l'accès à l'API
 //pour permettre la possibilité d'envoyer des requêtes avec les méthodes mentionnées
+/*
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, X-Auth-Token');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+*/
 
-
+app.use(cors())
 
 app.use('/api/books', booksRoutes);
 app.use('/api/auth', usersRoutes);
