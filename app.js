@@ -2,15 +2,18 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-var cors = require('cors');
-
 //fonction d'importation d'express
 const express = require("express");
+const cors = require('cors');
+
+const mongoose = require("mongoose");
+
 //constante app qui va appeler la méthode express
 const app = express();
 app.use(express.json());
+app.use('/images', express.static('images'));
 
-const mongoose = require("mongoose");
+
 const booksRoutes = require("./routes/books");
 const usersRoutes = require("./routes/users");
 const User = require("./models/Users");
@@ -26,17 +29,6 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée :/ !"));
 
-//middleware général : appliqué à toutes les routes du serveur
-//fonction pour ajouter des en-têtes aux réponses qu'on renvoie au navigateur pour autoriser l'accès à l'API
-//pour permettre la possibilité d'envoyer des requêtes avec les méthodes mentionnées
-/*
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, X-Auth-Token');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  next();
-});
-*/
 
 app.use(cors())
 
