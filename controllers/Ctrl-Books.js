@@ -5,13 +5,13 @@ const sharp = require('sharp'); //package pour optimiser les images
 
 //renvoie un tableau de tous les éléments du modèle Books
 exports.getAllBook = (req, res, next) => {
+    console.log(req.auth);
     Book.find()
       .then((books) => res.status(200).json(books))
       .catch((error) => res.status(400).json({ error }));
-  };
-  
+};
   //renvoie un élément avec l'id fourni
-  exports.getOneBook = (req, res, next) => {
+exports.getOneBook = (req, res, next) => {
     Book.findOne({ _id: req.params.id })
       .then((book) => res.status(200).json(book))
       .catch((error) => res.status(400).json({ error }));
@@ -25,7 +25,7 @@ exports.getAllBook = (req, res, next) => {
 //la méthode .save renvoie une promise
   
 
-    exports.createBook = (req, res,next) => {
+exports.createBook = (req, res,next) => {
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject._userId;
@@ -54,23 +54,23 @@ exports.getAllBook = (req, res, next) => {
     book.save()
     .then(() => {
         res.status(201).json({ message: 'Livre enregistré' });
-        })
-        .catch(error => {
-            console.error('Une erreur s\'est produite lors de l\'optimisation de l\'image :', error);
-            res.status(500).json({ error: 'Une erreur s\'est produite lors de l\'optimisation de l\'image.' });
-        });
-    };
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite lors de l\'optimisation de l\'image :', error);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de l\'optimisation de l\'image.' });
+    });
+};
       
+// { userId: "X", rating: X }
+exports.ratingBook = (req, res, next) => {
+    Book.findOne({_id: req.params.id})
+    .then( book => {
+        book.ratings.push({"grade": req.body.rating, "userId": req.auth.userId});
+        book.save();
+    });
+    // js objects array sum property
+}
 
-      /*  exports.ratingBook = (req, res, next) => {
-            Book.findOne({_id: req.params.id})
-            .then( book => {
-                if (book.userId != req.auth.userId) {
-                    res.status(401).json({message: 'Not authorized'});
-                } else {
-                }
-            })
-        }*/
 
 //vérification que c'est le créateur qui souhaite supprimer l'objet
 //récupération de l'url du fichier grâce à un split autour du répertoire image
