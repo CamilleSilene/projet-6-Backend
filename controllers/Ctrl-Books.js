@@ -5,7 +5,7 @@ const sharp = require('sharp'); //package pour optimiser les images
 
 //renvoie un tableau de tous les éléments du modèle Books
 exports.getAllBook = (req, res, next) => {
-    console.log(req.auth);
+   
     Book.find()
       .then((books) => res.status(200).json(books))
       .catch((error) => res.status(400).json({ error }));
@@ -34,15 +34,16 @@ exports.createBook = (req, res,next) => {
         
         const inputPath = path.join(__dirname, "../tmp/", req.file.filename);
         const outputPath = path.join(__dirname, "../images/", req.file.filename);
-
+        
+        sharp.cache(false)
+        
         sharp(inputPath)
         .toFormat('webp')
         .webp({quality: 80})
         .toFile(outputPath)
         .then( (outputInfo) => {
             fs.unlink(inputPath, (error) => {
-                console.log(error);
-            })
+                           })
         });
     }
 

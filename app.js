@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 //constante app qui va appeler la méthode express
 const app = express();
 app.use(express.json());
-app.use('/images', express.static('images'));
+app.use('/images', express.static('images'));//livre les images
 
 
 const booksRoutes = require("./routes/books");
