@@ -31,21 +31,6 @@ exports.createBook = (req, res, next) => {
 
   bookObject.ratings = [];
 
-  if (req.file) {
-    const inputPath = path.join(__dirname, "../tmp/", req.file.filename);
-    const outputPath = path.join(__dirname, "../images/", req.file.filename);
-
-    sharp.cache(false);
-
-    sharp(inputPath)
-      .toFormat("webp")
-      .webp({ quality: 80 })
-      .toFile(outputPath)
-      .then((outputInfo) => {
-        fs.unlink(inputPath, (error) => {console.log(error)});
-      });
-  }
-
   const book = new Book({
     ...bookObject,
     userId: req.auth.userId,
