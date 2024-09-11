@@ -75,10 +75,10 @@ exports.ratingBook = (req, res, next) => {
     }
 
     book.ratings.push({ grade: grade, userId: req.auth.userId });
-    if( book.ratings.length >= 3 ) {
-      const somme = book.ratings.reduce( (acc, rating) => acc + rating.grade, 0);
-      book.averageRating = Math.round(somme /  book.ratings.length);
-    }
+    
+    const somme = book.ratings.reduce( (acc, rating) => acc + rating.grade, 0);
+    book.averageRating = Math.round(somme /  book.ratings.length);
+    
     book.save()
       .then( updatedBook => res.status(200).json(updatedBook))
       .catch( error => res.status(400).json( { error }));

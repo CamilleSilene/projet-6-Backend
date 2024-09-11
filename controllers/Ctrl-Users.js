@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/Users');
+const User = require('../models/Users');;
+const dotenv = require("dotenv");
+dotenv.config();
 
 //utilisation de la méthode .hash de bcrypt pour hacher le mot de passe
 // on récupère la valeur password dans le body dans la requête
@@ -20,6 +22,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+    const JWT_TOKEN = process.env.JWT_TOKEN;
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
@@ -34,7 +37,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             {userId : user._id},
-                            'RANDOM_TOKEN_SECRET',
+                            JWT_TOKEN,
                             {expiresIn: '24h'}
                         )
                     });
