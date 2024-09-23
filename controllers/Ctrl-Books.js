@@ -48,11 +48,9 @@ exports.createBook = (req, res, next) => {
         "Une erreur s'est produite lors de l'optimisation de l'image :",
         error
       );
-      res
-        .status(500)
-        .json({
-          error: "Une erreur s'est produite lors de l'optimisation de l'image.",
-        });
+      res.status(500).json({
+        error: "Une erreur s'est produite lors de l'optimisation de l'image.",
+      });
     });
 };
 
@@ -63,28 +61,32 @@ exports.createBook = (req, res, next) => {
 //note non modifiable
 //moyenne averageRating doit être tenue à jour + livre renvoyé en réponse de la requête
 exports.ratingBook = (req, res, next) => {
-  Book.findOne({ _id: req.params.id }).then((book) => {
-    let grade = req.body.rating;
-    // si grade est inférieur à 0 il est égal à 0 ou alors il garde le chiffre indiqué
-    //idem pour sup à 5
-    grade = grade < 0 ? 0 : grade;
-    grade = grade > 5 ? 5 : grade;
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      let grade = req.body.rating;
+      // si grade est inférieur à 0 il est égal à 0 ou alors il garde le chiffre indiqué
+      //idem pour sup à 5
+      grade = grade < 0 ? 0 : grade;
+      grade = grade > 5 ? 5 : grade;
 
-    if( book.ratings.find( (rating) => rating.userId === req.auth.userId ) !== undefined ) {
-      return res.status(403).json({ message: "unauthorized request" })
-    }
+      if (
+        book.ratings.find((rating) => rating.userId === req.auth.userId) !==
+        undefined
+      ) {
+        return res.status(403).json({ message: "unauthorized request" });
+      }
 
-    book.ratings.push({ grade: grade, userId: req.auth.userId });
-    
-    const somme = book.ratings.reduce( (acc, rating) => acc + rating.grade, 0);
-    book.averageRating = Math.round(somme /  book.ratings.length);
-    
-    book.save()
-      .then( updatedBook => res.status(200).json(updatedBook))
-      .catch( error => res.status(400).json( { error }));
+      book.ratings.push({ grade: grade, userId: req.auth.userId });
 
-  }).catch( error => res.status(404).json( { error }));
+      const somme = book.ratings.reduce((acc, rating) => acc + rating.grade, 0);
+      book.averageRating = Math.round(somme / book.ratings.length);
 
+      book
+        .save()
+        .then((updatedBook) => res.status(200).json(updatedBook))
+        .catch((error) => res.status(400).json({ error }));
+    })
+    .catch((error) => res.status(404).json({ error }));
 };
 
 //vérification que c'est le créateur qui souhaite supprimer l'objet
@@ -153,7 +155,9 @@ exports.modifyBook = (req, res, next) => {
 };
 
 exports.bestRating = (req, res, next) => {
-  Book.find().sort('-averageRating').limit(3)
-  .then( livres => res.status(200).json(livres) )
-  .catch( error => res.status(500).json({error}) );
+  Book.find()
+    .sort("-averageRating")
+    .limit(3)
+    .then((livres) => res.status(200).json(livres))
+    .catch((error) => res.status(500).json({ error }));
 };
